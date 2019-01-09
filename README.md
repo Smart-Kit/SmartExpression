@@ -13,7 +13,6 @@
 | > | GreaterThan |
 | >= | GreaterThanOrEqual |
 | << | LeftShift |
-| ^ | ExclusiveOr |
 | < | LessThan |
 | <= | LessThanOrEqual |
 | . | MemberAccess |
@@ -21,9 +20,8 @@
 | * | Multiply |
 | ! | Not |
 | != | NotEqual |
-| | | Or |
+| &#124; | Or |
 | &#124;&#124; | OrElse |
-| ^ | Power |
 | >> | RightShift |
 | - | Subtract |
 | ?? | Coalesce a??b |
@@ -43,12 +41,12 @@
 ## SmartExpression 表达式语法
 
 ``` csharp
-public class CompileFactoryTest
+public class CompileEngineTest
     {
         [Fact]
         public void Compile_Bool()
         {
-            var exe = CompileFactory.Compile<Func<object, bool>>("Id==1");
+            var exe = CompileEngine.Compile<Func<object, bool>>("Id==1");
             bool result = exe.Invoke(new { Id = 1 });
             Assert.True(result);
         }
@@ -56,7 +54,7 @@ public class CompileFactoryTest
         [Fact]
         public void Compile_Bool_WithNoParamters()
         {
-            var exe = CompileFactory.Compile<Func<bool>>("1==1");
+            var exe = CompileEngine.Compile<Func<bool>>("1==1");
             bool result = exe.Invoke();
             Assert.True(result);
         }
@@ -64,7 +62,7 @@ public class CompileFactoryTest
         [Fact]
         public void Compile_Bool_IsNotNull()
         {
-            var exe = CompileFactory.Compile<Func<object, bool>>("Name!=null");
+            var exe = CompileEngine.Compile<Func<object, bool>>("Name!=null");
             bool result = exe.Invoke(new
             {
                 Name = "SmartExpression"
@@ -75,7 +73,7 @@ public class CompileFactoryTest
         [Fact]
         public void Compile_Bool_NestIsNotNull()
         {
-            var exe = CompileFactory.Compile<Func<object, bool>>("Who.Name!=null");
+            var exe = CompileEngine.Compile<Func<object, bool>>("Who.Name!=null");
             bool result = exe.Invoke(new
             {
                 Who = new
@@ -89,7 +87,7 @@ public class CompileFactoryTest
         [Fact]
         public void Compile_Bool_Array()
         {
-            var exe = CompileFactory.Compile<Func<object, bool>>("Ids.Length==3 and Ids[0]==1");
+            var exe = CompileEngine.Compile<Func<object, bool>>("Ids.Length==3 and Ids[0]==1");
             bool result = exe.Invoke(new
             {
                 Ids = new long[] { 1, 2, 3 }
@@ -100,7 +98,7 @@ public class CompileFactoryTest
         [Fact]
         public void Compile_Bool_NestBlock()
         {
-            var exe = CompileFactory.Compile<Func<object, bool>>("Ids!=null && (Ids.Length==3 && Ids[0]==1) && Name!=null");
+            var exe = CompileEngine.Compile<Func<object, bool>>("Ids!=null && (Ids.Length==3 && Ids[0]==1) && Name!=null");
             bool result = exe.Invoke(new
             {
                 Ids = new long[] { 1, 2, 3 },
@@ -112,7 +110,7 @@ public class CompileFactoryTest
         [Fact]
         public void Compile_Int()
         {
-            var exe = CompileFactory.Compile<Func<int>>("1+1");
+            var exe = CompileEngine.Compile<Func<int>>("1+1");
             int result = exe.Invoke();
             Assert.Equal(2, result);
         }
